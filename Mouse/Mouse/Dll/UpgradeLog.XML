@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="Dll">
+</Property><Property Name="File di soluzione" Value="F:\Progetto\Applicazione\Dll\Dll.sln">
+</Property><Property Name="Date" Value="lunedì 20 dicembre 2010">
+</Property><Property Name="Time" Value="09:37">
+</Property></Properties><Event ErrorLevel="0" Project="Dll" Source="Dll\Dll.vcproj" Description="Converting project file 'F:\Progetto\Applicazione\Dll\Dll\Dll.vcproj'.">
+</Event><Event ErrorLevel="1" Project="Dll" Source="Dll\Dll.vcproj" Description="VCWebServiceProxyGeneratorTool is no longer supported. The tool has been removed from your project settings.">
+</Event><Event ErrorLevel="0" Project="Dll" Source="Dll\Dll.vcproj" Description="Done converting to new project file 'F:\Progetto\Applicazione\Dll\Dll\Dll.vcxproj'.">
+</Event><Event ErrorLevel="3" Project="Dll" Source="Dll\Dll.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="Dll.sln" Description="Soluzione convertita correttamente">
+</Event><Event ErrorLevel="3" Project="" Source="Dll.sln" Description="Converted">
+</Event></UpgradeLog>
