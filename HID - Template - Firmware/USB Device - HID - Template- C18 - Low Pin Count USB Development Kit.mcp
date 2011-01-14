@@ -8,8 +8,8 @@ dir_src=
 dir_bin=
 dir_tmp=.\Objects
 dir_sin=
-dir_inc=C:\MCC18\h;d:\Microchip Solutions v2010-08-04\Microchip\Include;.
-dir_lib=C:\mcc18\lib
+dir_inc=C:\MCC18\h;c:\Microchip Solutions v2010-08-04\Microchip\Include;.
+dir_lib=C:\MCC18\lib
 dir_lkr=
 [CAT_FILTERS]
 filter_src=*.asm;*.c
@@ -39,7 +39,8 @@ file_011=USB Stack
 file_012=USB Stack
 file_013=USB Stack
 file_014=USB Stack
-file_015=.
+file_015=Common
+file_016=.
 [GENERATED_FILES]
 file_000=no
 file_001=no
@@ -57,6 +58,7 @@ file_012=no
 file_013=no
 file_014=no
 file_015=no
+file_016=no
 [OTHER_FILES]
 file_000=no
 file_001=no
@@ -74,6 +76,7 @@ file_012=no
 file_013=no
 file_014=no
 file_015=no
+file_016=no
 [FILE_INFO]
 file_000=usb_descriptors.c
 file_001=C:\Microchip Solutions v2010-08-04\Microchip\USB\usb_device.c
@@ -90,7 +93,8 @@ file_011=C:\Microchip Solutions v2010-08-04\Microchip\Include\USB\usb_common.h
 file_012=C:\Microchip Solutions v2010-08-04\Microchip\Include\USB\usb_device.h
 file_013=C:\Microchip Solutions v2010-08-04\Microchip\Include\USB\usb_function_hid.h
 file_014=C:\Microchip Solutions v2010-08-04\Microchip\Include\USB\usb_hal.h
-file_015=rm18f14k50.lkr
+file_015=C:\MCC18\h\EEP.h
+file_016=rm18f14k50.lkr
 [SUITE_INFO]
 suite_guid={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 suite_state=
