@@ -594,9 +594,6 @@ void UserSetReportHandler(void)
 	}
 }
 
-#define EnableEEPROMWrite()  ((void)(EECON1 = 0b00000100)) 
-#define DisableEEPROMWrite() ((void)(EECON1 = 0b00000000)) 
-
 /******************************************************************************
  * Function:        void ParseFeatureReport(void)
  *
@@ -618,9 +615,6 @@ void ParseFeatureReport(void)
 	/* Got the new thresholds, store them to EEPROM and to the ADCThresholds array */
 	size_t i;	
 	BYTE controllo = 0;
-
-	EnableEEPROMWrite();
-
 	for (i = 0; i < FEATURE_SIZE-1; i++)
 	{
 		Busy_eep();
@@ -628,10 +622,7 @@ void ParseFeatureReport(void)
 		controllo +=FeatureReport[i]; 
 	}
 	Busy_eep();
-		
 	Write_b_eep(i,controllo);
-	Busy_eep();
-	DisableEEPROMWrite();
 	new_settings();
 }
 
