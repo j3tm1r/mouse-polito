@@ -100,12 +100,11 @@ WORD SOGLIE[12]={0,0,0,0,200,200,400,612,612,400,800,800};
 USB_HANDLE UsbInHandle=0;
 char statoSx=0b00000000,statoDx = 0b00000000;
 int something=0;
-int inv_but=1;
 int sensibilita = 4;
-BYTE FeatureReport[FEATURE_SIZE] = {0}; /*IVANO: vettore feature report*/
-BYTE FeatureReportOut[FEATURE_SIZE] = {0}; /*IVANO: vettore feature report*/
-
-int checked = 1;/*IVANO: se vale 1, bisogna invertire il tasto destro ed il tasto sinistro*/
+BYTE FeatureReport[FEATURE_SIZE] = {0}; 
+BYTE FeatureReportOut[FEATURE_SIZE] = {0};
+int written = 0;
+int checked = 0;/*IVANO: se vale 1, bisogna invertire il tasto destro ed il tasto sinistro*/
 
 
 /** PRIVATE PROTOTYPES *********************************************/
@@ -380,9 +379,25 @@ static void InitializeSystem(void)
  * Note:            
  *
  *****************************************************************************/
+void new_settings()
+{
+	checked = FeatureReport[0];
+	sensibilita = FeatureReport[1]*2;
+	SOGLIE[LEFT] = FeatureReport[2]*200;
+	SOGLIE[RIGHT] = FeatureReport[2]*200;
+	SOGLIE[UP] = FeatureReport[2]*160;
+	SOGLIE[DOWN] = FeatureReport[2]*200;
+	SOGLIE[TASTO_SX] = FeatureReport[3]*200;
+	SOGLIE[TASTO_DX] = FeatureReport[3]*200;
+	SOGLIE[WHEELUP] = FeatureReport[4]*200;
+	SOGLIE[WHEELDOWN] = FeatureReport[4]*200;
+}
+
+
 void UserInit(void)
 {
 	int i=0;
+	BYTE controllo = 0;
     //Initialize all of the LED pins
     mInitLed_1();
     mLED_1_Off();
@@ -391,6 +406,14 @@ void UserInit(void)
     mInitSwitch();
     old_sw = action_sw; 
 	
+	for (i = 0; i < FEATURE_SIZE; i++)
+	{
+		Busy_eep();
+		FeatureReport[i] = Read_b_eep(i);
+		if(i!=5)controllo+=FeatureReport[i];
+	}
+	if(FeatureReport[5]==controllo)
+		new_settings();
 
 	for (i = 0; i < 4; i++)
 		hid_report_in[i] = 0;
@@ -425,9 +448,6 @@ WORD SampleChannel(AnalogPins ch)
 	INT tris_p = 0,lat_p = 0;	
 
 	chargePin = (ch==WHEELUP?WHEELDOWN:WHEELUP);
-	
-	//if(ch == WHEELUP) chargePin = WHEELDOWN;
-	//else chargePin=WHEELUP;
 
 	ADCON0 = (chargePin << 2) | 1;
 	//carico a 1
@@ -498,7 +518,7 @@ void ProcessIO(void)
 		hid_report_in[3]+=1,something=1;
 	if(valori[WHEELDOWN]<512)
 		hid_report_in[3]-=1,something=1;
-	if(checked == 1)
+	if(checked == 0)
 	{
 		if(valori[TASTO_SX]<512 != (hid_report_in[0]&1))
 			hid_report_in[0]^=1,something=1;
@@ -541,7 +561,6 @@ void UserGetReportHandler(void)
 		FeatureReportOut[2]=(SOGLIE[LEFT]+SOGLIE[RIGHT])/400;
 		FeatureReportOut[3]=(SOGLIE[TASTO_SX]+SOGLIE[TASTO_DX])/400;
 		FeatureReportOut[4]=(SOGLIE[WHEELUP]+SOGLIE[WHEELDOWN])/400;	
-		FeatureReportOut[5]=0;
 		//Invia il feature report
 		
 	if (SetupPkt.W_Value.byte.LB == 0)
@@ -598,26 +617,22 @@ void ParseFeatureReport(void)
 {
 	/* Got the new thresholds, store them to EEPROM and to the ADCThresholds array */
 	size_t i;	
+	BYTE controllo = 0;
 
 	EnableEEPROMWrite();
 
-	//parto da 1 perchè 0 non dovrebbe servire.. ma bisogna provare
-	for (i = 1; i < FEATURE_SIZE; i++)
+	for (i = 0; i < FEATURE_SIZE-1; i++)
 	{
 		Busy_eep();
-		Write_b_eep(i-1, FeatureReport[i]);
+		Write_b_eep(i, FeatureReport[i]);
+		controllo +=FeatureReport[i]; 
 	}
+	Busy_eep();
+		
+	Write_b_eep(i,controllo);
+	Busy_eep();
 	DisableEEPROMWrite();
-	checked = FeatureReport[1];
-	sensibilita = FeatureReport[2]*2;
-	SOGLIE[LEFT] = FeatureReport[3]*200;
-	SOGLIE[RIGHT] = FeatureReport[3]*200;
-	SOGLIE[UP] = FeatureReport[3]*160;
-	SOGLIE[DOWN] = FeatureReport[3]*200;
-	SOGLIE[TASTO_SX] = FeatureReport[4]*200;
-	SOGLIE[TASTO_DX] = FeatureReport[4]*200;
-	SOGLIE[WHEELUP] = FeatureReport[5]*200;
-	SOGLIE[WHEELDOWN] = FeatureReport[5]*200;
+	new_settings();
 }
 
 
